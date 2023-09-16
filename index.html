@@ -101,6 +101,7 @@
             canvas.height = 480
 
             WordCloud(document.getElementById('my_Canvas'), { list: outputArray, color: 'random-light', fontFamily: 'Couture', backgroundColor: '#313338', minRotation: 0, maxRotation: 0, weightFactor: 2 });
+            oracleBubble = ""
         }
 
         const words2weight = (str) => {
@@ -197,8 +198,7 @@
                 oracleBubble = oracleBubble.replace(/( any )/gm, " ")
                 oracleBubble = oracleBubble.replace(/( with )/gm, " ")
                 oracleBubble = oracleBubble.replace(/( without )/gm, " ")
-                //oracleBubble = oracleBubble.replace(/(()/gm, " ")
-                //oracleBubble = oracleBubble.replace(/())/gm, " ")
+            
                 result.value = oracleBubble;
                 apiCardNames = apiCardNames + cardName + "\n";
                 names.value = apiCardNames;
@@ -211,7 +211,7 @@
 
     </script>
     <p style="font-family:arial;">
-    <i>2023 Fisz-git v. 1.0.1</i><br>
+    <i>2023 Fisz-git v. 1.0.2</i><br>
     <i>Card data obtained courtesy of Scryfall API <a href="https://scryfall.com/docs/api">https://scryfall.com/docs/api</a></i><br>
     <i>Word cloud generated using wordcloud2.js <a href="https://github.com/timdream/wordcloud2.js">https://github.com/timdream/wordcloud2.jst</a></i>
     </p>
