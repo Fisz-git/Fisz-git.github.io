@@ -16,15 +16,11 @@
 
     <!--szukajka-->
     <p style="font-family:Arial">
-        Search for a card:
-        <br>
-        <input type="text" id="cardSearchField" value="" style="font-family:Arial; color: #dddddd; background-color:#2e3035">
-        <button type="button" onclick="searchButton()">Search</button><br>
-
+        
         IMPORTANT - DECKLIST FORMAT:<br>
         1 CARD1<br>
         1 CARD2<br>
-        etc.<br>
+        etc.<br><br>
         Import a decklist:
         <br>
         <textarea id="decklistField" value="" style="font-family: Arial; color: #dddddd; height:100px; width:500px; background-color:#2e3035"></textarea>
@@ -54,29 +50,6 @@
         let oracleBubble = "";
         let apiCardNames = "";
         let decklistRaw = "";
-
-        const searchButton = async () => {
-            let apiCardName = "";
-            apiCardName = document.getElementById("cardSearchField").value;
-            apiCardURL = 'https://api.scryfall.com/cards/search?q=' + apiCardName;
-
-            const response = await fetch(apiCardURL);
-            const json = await response.json();
-            const cardData = json.data[0];
-            const cardName = cardData.name;
-            const cardOracle = cardData.oracle_text;
-
-            let result = document.getElementById("searchResultField");
-            let names = document.getElementById("searchResultFieldName");
-
-            oracleBubble = oracleBubble + cardOracle + "\n";
-            result.value = oracleBubble;
-            apiCardNames = apiCardNames + cardName + "\n";
-            names.value = apiCardNames;
-
-            console.log(oracleBubble);
-
-        }
 
         function clearDecklist() {
             let clearDecklistText = "";
@@ -163,6 +136,15 @@
                 oracleBubble = oracleBubble.toLowerCase()
                 //filtering words
                 oracleBubble = oracleBubble.replace(/( a )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( 1 )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( 2 )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( 3 )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( 4 )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( 5 )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( 6 )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( 7 )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( 8 )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( 9 )/gm, " ")
                 oracleBubble = oracleBubble.replace(/( an )/gm, " ")
                 oracleBubble = oracleBubble.replace(/( of )/gm, " ")
                 oracleBubble = oracleBubble.replace(/( on )/gm, " ")
@@ -211,7 +193,7 @@
 
     </script>
     <p style="font-family:arial;">
-    <i>2023 Fisz-git v. 1.0.2</i><br>
+    <i>2023 Fisz-git v. 1.0.3</i><br>
     <i>Card data obtained courtesy of Scryfall API <a href="https://scryfall.com/docs/api">https://scryfall.com/docs/api</a></i><br>
     <i>Word cloud generated using wordcloud2.js <a href="https://github.com/timdream/wordcloud2.js">https://github.com/timdream/wordcloud2.jst</a></i>
     </p>
