@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+    </style>
+</head>
+
+<body>
+    <!-- style="background-color:#313338" text="dddddd" DESIGN IN PROGRESS -->
+    <p style="font-family:Beleren; font-size:18px; margin-bottom:0"><b>Magic The Gathering: Oracle text for word
+            cloud</b></p>
+    <canvas id="my_Canvas" width="1px" height="1px"></canvas>
+
+    <!--szukajka-->
+    <p style="font-family:Arial">
+        Search for a card:
+        <br>
+        <input type="text" id="cardSearchField" value="" style="font-family:Arial">
+        <button type="button" onclick="searchButton()">Search</button><br>
+
+        IMPORTANT - DECKLIST FORMAT:<br>
+        1 CARD1<br>
+        1 CARD2<br>
+        etc.<br>
+        Import a decklist:
+        <br>
+        <textarea id="decklistField" value="" style="font-family: Arial; height:200px; width:500px"></textarea>
+        <br>
+        <button type="button" onclick="importDecklist()">Import decklist</button>
+        <button type="button" onclick="clearDecklist()">Clear</button>
+        <button type="button" onclick="clearOracle()">Clear Oracle</button>
+        <button type="button" onclick="createWordcloud()">Create wordcloud</button><br>
+
+        Combined oracle text for word cloud:
+        <br>
+
+        <textarea id="searchResultField" value="" style="font-family: Arial; height:500px; width:370px"></textarea>
+        <textarea id="searchResultFieldName" value="" style="font-family: Arial; height:500px; width:120px"></textarea>
+    </p>
+
+    <script defer src="./wordcloud/src/wordcloud2.js"></script>
+
+    <script>
+
+        //search for a card and display it in the textarea below
+
+
+
+        let apiCardName = "";
+        let apiCardURL = "";
+        let oracleBubble = "";
+        let apiCardNames = "";
+        let decklistRaw = "";
+
+        const searchButton = async () => {
+            let apiCardName = "";
+            apiCardName = document.getElementById("cardSearchField").value;
+            apiCardURL = 'https://api.scryfall.com/cards/search?q=' + apiCardName;
+
+            const response = await fetch(apiCardURL);
+            const json = await response.json();
+            const cardData = json.data[0];
+            const cardName = cardData.name;
+            const cardOracle = cardData.oracle_text;
+
+            let result = document.getElementById("searchResultField");
+            let names = document.getElementById("searchResultFieldName");
+
+            oracleBubble = oracleBubble + cardOracle + "\n";
+            result.value = oracleBubble;
+            apiCardNames = apiCardNames + cardName + "\n";
+            names.value = apiCardNames;
+
+            console.log(oracleBubble);
+
+        }
+
+        function clearDecklist() {
+            let clearDecklistText = "";
+            clearDecklistText = document.getElementById("decklistField");
+            clearDecklistText.value = "";
+        }
+
+        function clearOracle() {
+            let clearOracle = "";
+            clearOracle = document.getElementById("searchResultField");
+            clearOracle.value = "";
+            let clearOracle2 = "";
+            clearOracle2 = document.getElementById("searchResultFieldName");
+            clearOracle2.value = "";
+        }
+
+        function createWordcloud() {
+            console.log(oracleBubble)
+            const outputArray = words2weight(oracleBubble)
+            const canvas = document.getElementById('my_Canvas')
+            canvas.width = 600
+            canvas.height = 480
+
+            WordCloud(document.getElementById('my_Canvas'), { list: outputArray, backgroundColor: '#232e2c', minRotation: 0, maxRotation: 0, weightFactor: 2 });
+        }
+
+        const words2weight = (str) => {
+            const returnMap = new Map();
+            const words = str.split(' ')
+            words.forEach(word => {
+                if (returnMap.has(word)) {
+                    returnMap.set(word, returnMap.get(word) + 1)
+                }
+                else {
+                    returnMap.set(word, 1)
+                }
+
+            });
+
+            //array^2
+            console.log(Array.from(returnMap.entries()))
+            //Array.from(returnMap.entries())
+            return Array.from(returnMap.entries())
+            //wytwalic wartosci 1
+        }
+
+
+        const importDecklist = async () => {
+            let decklistRaw = "";
+            decklistRaw = document.getElementById("decklistField").value;
+            decklistRaw = decklistRaw.slice(2);
+            decklistRaw = decklistRaw.replace(/(\r\n..|\n..|\r..)/gm, "\n")
+
+            decklistArray = decklistRaw;
+            decklistArray = decklistArray.split("\n");
+            console.log(decklistArray);
+            console.log(decklistArray.length);
+
+            for (let index = 0; index < decklistArray.length; index++) {
+
+                let importCardName = "";
+                importCardName = decklistArray[index];
+                importCardURL = 'https://api.scryfall.com/cards/search?q=' + importCardName;
+
+                const response = await fetch(importCardURL);
+                const json = await response.json();
+                const cardData = json.data[0];
+                const cardName = cardData.name;
+                const cardOracle = cardData.oracle_text;
+
+                let result = document.getElementById("searchResultField");
+                let names = document.getElementById("searchResultFieldName");
+
+                oracleBubble = oracleBubble + cardOracle + " ";
+                oracleBubble = oracleBubble.replace(/(\n)/gm, " ")
+                oracleBubble = oracleBubble.replace(/({.})/gm, " ")
+                result.value = oracleBubble;
+                apiCardNames = apiCardNames + cardName + "\n";
+                names.value = apiCardNames;
+
+            }
+            console.log(oracleBubble);
+
+        }
+
+
+    </script>
+</body>
+
+</html>
