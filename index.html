@@ -10,7 +10,7 @@
 </head>
 
 <body style="background-color:#313338" text="dddddd">
-    <p style="font-family:Beleren; font-size:18px; margin-bottom:0"><b>Magic The Gathering: Oracle text for word
+    <p style="font-family:Beleren; font-size:32px; margin-bottom:0"><b>Magic The Gathering: decklist word
             cloud</b></p>
     <canvas id="my_Canvas" width="1px" height="1px"></canvas>
 
@@ -97,10 +97,10 @@
             console.log(oracleBubble)
             const outputArray = words2weight(oracleBubble)
             const canvas = document.getElementById('my_Canvas')
-            canvas.width = 600
+            canvas.width = 800
             canvas.height = 480
 
-            WordCloud(document.getElementById('my_Canvas'), { list: outputArray, backgroundColor: '#313338', minRotation: 0, maxRotation: 0, weightFactor: 2 });
+            WordCloud(document.getElementById('my_Canvas'), { list: outputArray, color: 'random-light', fontFamily: 'Couture', backgroundColor: '#313338', minRotation: 0, maxRotation: 0, weightFactor: 2 });
         }
 
         const words2weight = (str) => {
@@ -155,8 +155,11 @@
                 oracleBubble = oracleBubble.replace(/(\n)/gm, " ")
                 oracleBubble = oracleBubble.replace(/({.})/gm, "")
                 oracleBubble = oracleBubble.replace(/(,)/gm, "")
+                oracleBubble = oracleBubble.replace(/(\.)/gm, "")
                 oracleBubble = oracleBubble.replace(/(:)/gm, "")
                 oracleBubble = oracleBubble.replace(/(")/gm, "")
+                oracleBubble = oracleBubble.replace(/[()]/gm, "")
+                oracleBubble = oracleBubble.toLowerCase()
                 //filtering words
                 oracleBubble = oracleBubble.replace(/( a )/gm, " ")
                 oracleBubble = oracleBubble.replace(/( an )/gm, " ")
@@ -188,6 +191,8 @@
                 oracleBubble = oracleBubble.replace(/( as )/gm, " ")
                 oracleBubble = oracleBubble.replace(/( to )/gm, " ")
                 oracleBubble = oracleBubble.replace(/( in )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( can )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( can't )/gm, " ")
                 oracleBubble = oracleBubble.replace(/( has )/gm, " ")
                 oracleBubble = oracleBubble.replace(/( any )/gm, " ")
                 oracleBubble = oracleBubble.replace(/( with )/gm, " ")
@@ -205,9 +210,11 @@
 
 
     </script>
+    <p style="font-family:arial;">
     <i>2023 Fisz-git v. 1.0.1</i><br>
     <i>Card data obtained courtesy of Scryfall API <a href="https://scryfall.com/docs/api">https://scryfall.com/docs/api</a></i><br>
     <i>Word cloud generated using wordcloud2.js <a href="https://github.com/timdream/wordcloud2.js">https://github.com/timdream/wordcloud2.jst</a></i>
+    </p>
 </body>
 
 </html>
