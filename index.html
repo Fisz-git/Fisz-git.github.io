@@ -3,11 +3,13 @@
 
 <head>
     <style>
+        a:link {
+            color: #10a8f0
+        }
     </style>
 </head>
 
-<body>
-    <!-- style="background-color:#313338" text="dddddd" DESIGN IN PROGRESS -->
+<body style="background-color:#313338" text="dddddd">
     <p style="font-family:Beleren; font-size:18px; margin-bottom:0"><b>Magic The Gathering: Oracle text for word
             cloud</b></p>
     <canvas id="my_Canvas" width="1px" height="1px"></canvas>
@@ -16,7 +18,7 @@
     <p style="font-family:Arial">
         Search for a card:
         <br>
-        <input type="text" id="cardSearchField" value="" style="font-family:Arial">
+        <input type="text" id="cardSearchField" value="" style="font-family:Arial; color: #dddddd; background-color:#2e3035">
         <button type="button" onclick="searchButton()">Search</button><br>
 
         IMPORTANT - DECKLIST FORMAT:<br>
@@ -25,18 +27,18 @@
         etc.<br>
         Import a decklist:
         <br>
-        <textarea id="decklistField" value="" style="font-family: Arial; height:100px; width:500px"></textarea>
+        <textarea id="decklistField" value="" style="font-family: Arial; color: #dddddd; height:100px; width:500px; background-color:#2e3035"></textarea>
         <br>
         <button type="button" onclick="importDecklist()">Import decklist</button>
-        <button type="button" onclick="clearDecklist()">Clear</button>
-        <button type="button" onclick="clearOracle()">Clear Oracle</button>
+        <button type="button" onclick="clearDecklist()">Clear decklist</button>
+        <button type="button" onclick="clearOracle()">Clear oracle</button>
         <button type="button" onclick="createWordcloud()">Create wordcloud</button><br>
 
         Combined oracle text for word cloud:
         <br>
 
-        <textarea id="searchResultField" value="" style="font-family: Arial; height:200px; width:370px"></textarea>
-        <textarea id="searchResultFieldName" value="" style="font-family: Arial; height:200px; width:120px"></textarea>
+        <textarea id="searchResultField" value="" style="font-family: Arial; color: #dddddd; height:200px; width:370px; background-color:#2e3035"></textarea>
+        <textarea id="searchResultFieldName" value="" style="font-family: Arial; color: #dddddd; height:200px; width:120px; background-color:#2e3035"></textarea>
     </p>
 
     <script defer src="./wordcloud/src/wordcloud2.js"></script>
@@ -98,7 +100,7 @@
             canvas.width = 600
             canvas.height = 480
 
-            WordCloud(document.getElementById('my_Canvas'), { list: outputArray, backgroundColor: '#232e2c', minRotation: 0, maxRotation: 0, weightFactor: 2 });
+            WordCloud(document.getElementById('my_Canvas'), { list: outputArray, backgroundColor: '#313338', minRotation: 0, maxRotation: 0, weightFactor: 2 });
         }
 
         const words2weight = (str) => {
