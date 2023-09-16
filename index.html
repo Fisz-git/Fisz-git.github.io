@@ -34,7 +34,7 @@
         <button type="button" onclick="clearOracle()">Clear oracle</button>
         <button type="button" onclick="createWordcloud()">Create wordcloud</button><br>
 
-        Combined oracle text for word cloud:
+        Combined, filtered oracle text for word cloud:
         <br>
 
         <textarea id="searchResultField" value="" style="font-family: Arial; color: #dddddd; height:200px; width:370px; background-color:#2e3035"></textarea>
@@ -151,8 +151,49 @@
                 let names = document.getElementById("searchResultFieldName");
 
                 oracleBubble = oracleBubble + cardOracle + " ";
+                //filtering characters
                 oracleBubble = oracleBubble.replace(/(\n)/gm, " ")
-                oracleBubble = oracleBubble.replace(/({.})/gm, " ")
+                oracleBubble = oracleBubble.replace(/({.})/gm, "")
+                oracleBubble = oracleBubble.replace(/(,)/gm, "")
+                oracleBubble = oracleBubble.replace(/(:)/gm, "")
+                oracleBubble = oracleBubble.replace(/(")/gm, "")
+                //filtering words
+                oracleBubble = oracleBubble.replace(/( a )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( an )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( of )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( on )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( its )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( it )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( one )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( two )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( three )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( put )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( add )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( may )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( cards )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( card )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( targets )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( target )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( controller )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( control )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( or )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( your )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( you )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( the )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( this )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( that )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( if )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( is )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( are )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( as )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( to )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( in )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( has )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( any )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( with )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( without )/gm, " ")
+                //oracleBubble = oracleBubble.replace(/(()/gm, " ")
+                //oracleBubble = oracleBubble.replace(/())/gm, " ")
                 result.value = oracleBubble;
                 apiCardNames = apiCardNames + cardName + "\n";
                 names.value = apiCardNames;
@@ -164,7 +205,7 @@
 
 
     </script>
-    <i>2023 Fisz-git</i><br>
+    <i>2023 Fisz-git v. 1.0.1</i><br>
     <i>Card data obtained courtesy of Scryfall API <a href="https://scryfall.com/docs/api">https://scryfall.com/docs/api</a></i><br>
     <i>Word cloud generated using wordcloud2.js <a href="https://github.com/timdream/wordcloud2.js">https://github.com/timdream/wordcloud2.jst</a></i>
 </body>
