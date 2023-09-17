@@ -16,25 +16,68 @@
 
     <!--szukajka-->
     <p style="font-family:Arial">
-        
+
         IMPORTANT - DECKLIST FORMAT:<br>
         1 CARD1<br>
         1 CARD2<br>
         etc.<br><br>
         Import a decklist:
         <br>
-        <textarea id="decklistField" value="" style="font-family: Arial; color: #dddddd; height:100px; width:500px; background-color:#2e3035"></textarea>
+        <textarea id="decklistField" value=""
+            style="font-family: Arial; color: #dddddd; height:100px; width:500px; background-color:#2e3035"></textarea>
         <br>
+        
         <button type="button" onclick="importDecklist()">Import decklist</button>
         <button type="button" onclick="clearDecklist()">Clear decklist</button>
         <button type="button" onclick="clearOracle()">Clear oracle</button>
         <button type="button" onclick="createWordcloud()">Create wordcloud</button><br>
 
+        <select id = "dropdown" value="" onchange = "selectOption()">
+            <option value="0">Choose your deck colors...</option>
+            <option value="1">Colorless</option>
+            <option value="2">White</option>
+            <option value="3">Blue</option>
+            <option value="4">Black</option>
+            <option value="5">Red</option>
+            <option value="6">Green</option>
+            <option value="7">Azorius(WU)</option>
+            <option value="8">Dimir(UB)</option>
+            <option value="9">Rakdos(BR)</option>
+            <option value="10">Gruul(RG)</option>
+            <option value="11">Selesnya(WG)</option>
+            <option value="12">Orzhov(WB)</option>
+            <option value="13">Izzet(UR)</option>
+            <option value="14">Golgari(BG)</option>
+            <option value="15">Boros(WR)</option>
+            <option value="16">Simic(UG)</option>
+            <!-- options 17-32 disabled until I figure out how to use 3+ colors-->
+            <option disabled value="17">Abzan(WBG)</option>
+            <option disabled value="18">Jeskai(WUR)</option>
+            <option disabled value="19">Sultai(UBG)</option>
+            <option disabled value="20">Mardu(WBR)</option>
+            <option disabled value="21">Temur(URG)</option>
+            <option disabled value="22">Brokers(WUG)</option>
+            <option disabled value="23">Obscura(WUB)</option>
+            <option disabled value="24">Maestros(UBR)</option>
+            <option disabled value="25">Riveteers(BRG)</option>
+            <option disabled value="26">Cabaretti(WRG)</option>
+            <option disabled value="27">Yore-Tiller(WUBR)</option>
+            <option disabled value="28">Glint-Eye(UBRG)</option>
+            <option disabled value="29">Dune-Brood(BRGW)</option>
+            <option disabled value="30">Ink-Treader(RGWU)</option>
+            <option disabled value="31">Witch-Maw(GWUB)</option>
+            <option disabled value="32">5-color</option>
+
+        </select>
+        <br>
+
         Combined, filtered oracle text for word cloud:
         <br>
 
-        <textarea id="searchResultField" value="" style="font-family: Arial; color: #dddddd; height:200px; width:370px; background-color:#2e3035"></textarea>
-        <textarea id="searchResultFieldName" value="" style="font-family: Arial; color: #dddddd; height:200px; width:120px; background-color:#2e3035"></textarea>
+        <textarea id="searchResultField" value=""
+            style="font-family: Arial; color: #dddddd; height:200px; width:370px; background-color:#2e3035"></textarea>
+        <textarea id="searchResultFieldName" value=""
+            style="font-family: Arial; color: #dddddd; height:200px; width:120px; background-color:#2e3035"></textarea>
     </p>
 
     <script defer src="./wordcloud/src/wordcloud2.js"></script>
@@ -50,11 +93,84 @@
         let oracleBubble = "";
         let apiCardNames = "";
         let decklistRaw = "";
+        let color1 = "#FFFFFF";
+        let color2 = "#FFFFFF";
+        let color3 = "#FFFFFF";
+        let color4 = "#FFFFFF";
+        let color5 = "#FFFFFF";
+
+        //deck colors
+        function selectOption() {
+            selectedValue = document.getElementById("dropdown").value;
+            console.log(selectedValue);
+
+            if (selectedValue === '1') {
+                color1 = "#6c6c6c"
+                color2 = "#b2b2b2"
+                color3 = "#8a8a8a"                
+            } else if (selectedValue === '2') {
+                color1 = "#d1b264"
+                color2 = "#d1c5a7"
+                color3 = "#d3bd88" 
+            } else if (selectedValue === '3') {
+                color1 = "#07357f"
+                color2 = "#10a8f0"
+                color3 = "#107bf0"
+            } else if (selectedValue === '4') {
+                color1 = "#7700be"
+                color2 = "#b373d9"
+                color3 = "#9948ca"
+            } else if (selectedValue === '5') {
+                color1 = "#c80000"
+                color2 = "#cb6a6a"
+                color3 = "#ca3e3e"
+            } else if (selectedValue === '6') {
+                color1 = "#00551e"
+                color2 = "#246b3d"
+                color3 = "#367f50"
+            } else if (selectedValue === '7') {
+                color1 = "#d3bd88"
+                color2 = "#107bf0"
+            } else if (selectedValue === '8') {
+                color1 = "#07357f"
+                color2 = "#6c6c6c"
+            } else if (selectedValue === "9") {
+                color1 = "#6c6c6c"
+                color2 = "#c80000"
+            } else if (selectedValue === "10") {
+                color1 = "#c80000"
+                color2 = "#246b3d"
+            } else if (selectedValue === "11") {
+                color1 = "#d3bd88"
+                color2 = "#367f50"
+            } else if (selectedValue === "12") {
+                color1 = "#d3bd88"
+                color2 = "#9948ca"
+            } else if (selectedValue === "13") {
+                color1 = "#ca3e3e"
+                color2 = "#107bf0"
+            } else if (selectedValue === "14") {
+                color1 = "#00551e"
+                color2 = "#6c6c6c"
+            } else if (selectedValue === "15") {
+                color1 = "#c80000"
+                color2 = "#d3bd88"
+            } else if (selectedValue === "16") {
+                color1 = "#367f50"
+                color2 = "#10a8f0"
+            } else {
+                console.log('Error');
+            }
+            console.log(color1);
+        }
 
         function clearDecklist() {
             let clearDecklistText = "";
             clearDecklistText = document.getElementById("decklistField");
             clearDecklistText.value = "";
+            color1 = ""
+            color2 = ""
+            
         }
 
         function clearOracle() {
@@ -73,7 +189,18 @@
             canvas.width = 800
             canvas.height = 480
 
-            WordCloud(document.getElementById('my_Canvas'), { list: outputArray, color: 'random-light', fontFamily: 'Couture', backgroundColor: '#313338', minRotation: 0, maxRotation: 0, weightFactor: 2 });
+            WordCloud(document.getElementById('my_Canvas'), {
+                list: outputArray,
+                color: function (word, weight) {
+                    return (weight > 10) ? color1 : color2;
+                    //return (weight <5) ? color2 : color3;
+                }, 
+                fontFamily: 'Couture', 
+                backgroundColor: '#313338', 
+                minRotation: 0, 
+                maxRotation: 0, 
+                weightFactor: 2
+            });
             oracleBubble = ""
         }
 
@@ -180,7 +307,7 @@
                 oracleBubble = oracleBubble.replace(/( any )/gm, " ")
                 oracleBubble = oracleBubble.replace(/( with )/gm, " ")
                 oracleBubble = oracleBubble.replace(/( without )/gm, " ")
-            
+
                 result.value = oracleBubble;
                 apiCardNames = apiCardNames + cardName + "\n";
                 names.value = apiCardNames;
@@ -193,9 +320,11 @@
 
     </script>
     <p style="font-family:arial;">
-    <i>2023 Fisz-git v. 1.0.3</i><br>
-    <i>Card data obtained courtesy of Scryfall API <a href="https://scryfall.com/docs/api">https://scryfall.com/docs/api</a></i><br>
-    <i>Word cloud generated using wordcloud2.js <a href="https://github.com/timdream/wordcloud2.js">https://github.com/timdream/wordcloud2.jst</a></i>
+        <i>2023 Fisz-git v. 1.0.3</i><br>
+        <i>Card data obtained courtesy of Scryfall API <a
+                href="https://scryfall.com/docs/api">https://scryfall.com/docs/api</a></i><br>
+        <i>Word cloud generated using wordcloud2.js <a
+                href="https://github.com/timdream/wordcloud2.js">https://github.com/timdream/wordcloud2.jst</a></i>
     </p>
 </body>
 
