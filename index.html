@@ -6,10 +6,23 @@
         a:link {
             color: #10a8f0
         }
+
+        @font-face {
+        font-family: Beleren;
+        src: url(beleren-bold_P1.01.ttf);
+        }
+
+        @font-face {
+        font-family: Couture;
+        src: url(couture-bld.otf);
+        }
+
+        
     </style>
 </head>
 
 <body style="background-color:#313338" text="dddddd">
+    
     <p style="font-family:Beleren; font-size:32px; margin-bottom:0"><b>Magic The Gathering: decklist word
             cloud</b></p>
     <canvas id="my_Canvas" width="1px" height="1px"></canvas>
@@ -51,16 +64,16 @@
             <option value="15">Boros(WR)</option>
             <option value="16">Simic(UG)</option>
             <!-- options 17-32 disabled until I figure out how to use 3+ colors-->
-            <option disabled value="17">Abzan(WBG)</option>
-            <option disabled value="18">Jeskai(WUR)</option>
-            <option disabled value="19">Sultai(UBG)</option>
-            <option disabled value="20">Mardu(WBR)</option>
-            <option disabled value="21">Temur(URG)</option>
-            <option disabled value="22">Brokers(WUG)</option>
-            <option disabled value="23">Obscura(WUB)</option>
-            <option disabled value="24">Maestros(UBR)</option>
-            <option disabled value="25">Riveteers(BRG)</option>
-            <option disabled value="26">Cabaretti(WRG)</option>
+            <option value="17">Abzan(WBG)</option>
+            <option value="18">Jeskai(WUR)</option>
+            <option value="19">Sultai(UBG)</option>
+            <option value="20">Mardu(WBR)</option>
+            <option value="21">Temur(URG)</option>
+            <option value="22">Brokers(WUG)</option>
+            <option value="23">Obscura(WUB)</option>
+            <option value="24">Maestros(UBR)</option>
+            <option value="25">Riveteers(BRG)</option>
+            <option value="26">Cabaretti(WRG)</option>
             <option disabled value="27">Yore-Tiller(WUBR)</option>
             <option disabled value="28">Glint-Eye(UBRG)</option>
             <option disabled value="29">Dune-Brood(BRGW)</option>
@@ -113,51 +126,102 @@
                 color2 = "#d1c5a7"
                 color3 = "#d3bd88" 
             } else if (selectedValue === '3') {
-                color1 = "#07357f"
-                color2 = "#10a8f0"
-                color3 = "#107bf0"
+                color1 = "#0064d1"
+                color2 = "#107bf0"
+                color3 = "#10a8f0"
             } else if (selectedValue === '4') {
                 color1 = "#7700be"
                 color2 = "#b373d9"
                 color3 = "#9948ca"
             } else if (selectedValue === '5') {
                 color1 = "#c80000"
-                color2 = "#cb6a6a"
-                color3 = "#ca3e3e"
+                color2 = "#ca3e3e"
+                color3 = "#cb6a6a"
             } else if (selectedValue === '6') {
                 color1 = "#00551e"
                 color2 = "#246b3d"
                 color3 = "#367f50"
             } else if (selectedValue === '7') {
-                color1 = "#d3bd88"
+                color1 = "#e9e0ca"
                 color2 = "#107bf0"
+                color3 = "#70cffc"
             } else if (selectedValue === '8') {
                 color1 = "#07357f"
                 color2 = "#6c6c6c"
+                color3 = "#00131c"
             } else if (selectedValue === "9") {
                 color1 = "#6c6c6c"
                 color2 = "#c80000"
+                color3 = "#1c0000"
             } else if (selectedValue === "10") {
                 color1 = "#c80000"
                 color2 = "#246b3d"
+                color3 = "#fa652f"
             } else if (selectedValue === "11") {
-                color1 = "#d3bd88"
+                color1 = "#f0fffb"
                 color2 = "#367f50"
+                color3 = "#ceffc1"
             } else if (selectedValue === "12") {
-                color1 = "#d3bd88"
+                color1 = "#fff0fc"
                 color2 = "#9948ca"
+                color3 = "#120022"
             } else if (selectedValue === "13") {
                 color1 = "#ca3e3e"
                 color2 = "#107bf0"
+                color3 = "#cb6a6a"
             } else if (selectedValue === "14") {
                 color1 = "#00551e"
                 color2 = "#6c6c6c"
+                color3 = "#000a03"
             } else if (selectedValue === "15") {
                 color1 = "#c80000"
                 color2 = "#d3bd88"
+                color3 = "#fff7cc"
             } else if (selectedValue === "16") {
                 color1 = "#367f50"
                 color2 = "#10a8f0"
+                color3 = "#00b98a"
+                //
+            } else if (selectedValue === "17") {
+                color1 = "#ffebb5"
+                color2 = "#171717"
+                color3 = "#005e29"
+            } else if (selectedValue === "18") {
+                color1 = "#fffeed"
+                color2 = "#24afff"
+                color3 = "#ff4000"
+            } else if (selectedValue === "19") {
+                color1 = "#0d0d0d"
+                color2 = "#006600"
+                color3 = "#003c66"
+            } else if (selectedValue === "20") {
+                color1 = "#c93c00"
+                color2 = "#1f0900"
+                color3 = "#fff7cf"
+            } else if (selectedValue === "21") {
+                color1 = "#e04000"
+                color2 = "#10a8f0"
+                color3 = "#00b98a"
+            } else if (selectedValue === "22") {
+                color1 = "#fff9e8"
+                color2 = "#3dcfff"
+                color3 = "#1d8500"
+            } else if (selectedValue === "23") {
+                color1 = "#003d82"
+                color2 = "#051a33"
+                color3 = "#d9eaff"
+            } else if (selectedValue === "24") {
+                color1 = "#0467c4"
+                color2 = "#1f0400"
+                color3 = "#7d1000"
+            } else if (selectedValue === "25") {
+                color1 = "#0b1700"
+                color2 = "#d63d00"
+                color3 = "#009600"
+            } else if (selectedValue === "26") {
+                color1 = "#fff799"
+                color2 = "#f24500"
+                color3 = "#256e00"
             } else {
                 console.log('Error');
             }
@@ -170,6 +234,7 @@
             clearDecklistText.value = "";
             color1 = ""
             color2 = ""
+            oracleBubble = ""
             
         }
 
@@ -180,6 +245,7 @@
             let clearOracle2 = "";
             clearOracle2 = document.getElementById("searchResultFieldName");
             clearOracle2.value = "";
+            oracleBubble = ""
         }
 
         function createWordcloud() {
@@ -191,17 +257,16 @@
 
             WordCloud(document.getElementById('my_Canvas'), {
                 list: outputArray,
-                color: function (word, weight) {
-                    return (weight > 10) ? color1 : color2;
-                    //return (weight <5) ? color2 : color3;
+                color: function() {
+                    return ([color1, color2, color3])[Math.floor(Math.random() * 3)]
                 }, 
                 fontFamily: 'Couture', 
                 backgroundColor: '#313338', 
                 minRotation: 0, 
                 maxRotation: 0, 
-                weightFactor: 2
+                weightFactor: 2,
+                shuffle: true
             });
-            oracleBubble = ""
         }
 
         const words2weight = (str) => {
@@ -227,6 +292,8 @@
 
         const importDecklist = async () => {
             let decklistRaw = "";
+            let decklistArray = [];
+            let apiCardNames = "";
             decklistRaw = document.getElementById("decklistField").value;
             decklistRaw = decklistRaw.slice(2);
             decklistRaw = decklistRaw.replace(/(\r\n..|\n..|\r..)/gm, "\n")
@@ -320,7 +387,7 @@
 
     </script>
     <p style="font-family:arial;">
-        <i>2023 Fisz-git v. 1.0.3</i><br>
+        <i>2023 Fisz-git v. 1.1.2</i><br>
         <i>Card data obtained courtesy of Scryfall API <a
                 href="https://scryfall.com/docs/api">https://scryfall.com/docs/api</a></i><br>
         <i>Word cloud generated using wordcloud2.js <a
