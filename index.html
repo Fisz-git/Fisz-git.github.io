@@ -21,128 +21,66 @@
 
 <body style="background-color:#313338" text="dddddd">
 
-    <p style="font-family:Beleren; font-size:32px; margin-bottom:0"><b>Magic The Gathering: decklist word
-            cloud</b></p>
+    <p style="font-family:Beleren; font-size:32px; margin-bottom:0"><b>Magic The Gathering: decklist word cloud</b></p>
+    <!--this canvas will be expanded once the wordcloud has been generated-->
     <canvas id="my_Canvas" width="1px" height="1px"></canvas>
 
-    <!--szukajka-->
     <p style="font-family:Arial">
-
         <b>IMPORTANT - DECKLIST FORMAT:</b><br>
         1 CARD1<br>
         1 CARD2<br>
         etc.<br>
         <b>NO SIDEBOARD, MAYBEBOARD HEADERS</b>
         <br><br>
+        <!--decklist import textarea and functions-->
         Import a decklist:
         <br>
         <textarea id="decklistField" value=""
             style="font-family: Arial; color: #dddddd; height:100px; width:500px; background-color:#2e3035"></textarea>
         <br>
 
-        <button type="button" onclick="importDecklist()">Import decklist</button>
-        <button type="button" onclick="clearDecklist()">Clear decklist</button>
-        <button type="button" onclick="clearOracle()">Clear oracle</button>
+        <!--import decklist-->
+        <button type="button" onclick="importDecklist()">Import</button>
+        <!--clear imported decklist and stored oracle text-->
+        <button type="button" onclick="clearDecklist()">Clear</button>
+        <!--create wordcloud-->
         <button type="button" onclick="createWordcloud()">Create wordcloud</button><br>
         <br>
-
-        Combined, filtered oracle text for word cloud:
-        <br>
-
-        <textarea id="searchResultField" value=""
-            style="font-family: Arial; color: #dddddd; height:200px; width:370px; background-color:#2e3035"></textarea>
-        <textarea id="searchResultFieldName" value=""
-            style="font-family: Arial; color: #dddddd; height:200px; width:120px; background-color:#2e3035"></textarea>
+        <!--readonly progress bar/console-->
+        <textarea readonly="yes" id="waitingRoom" value=""
+            style="font-family: Arial; color: #dddddd; height:20px; width:500px; background-color:#2e3035">Paste your decklist in the text area above and click on Import.</textarea>
     </p>
 
+    <!--importing wordcloud2.js-->
     <script defer src="./wordcloud/src/wordcloud2.js"></script>
 
     <script>
 
-        //search for a card and display it in the textarea below
-
-
-
+        //API search variables
         let apiCardName = "";
         let apiCardURL = "";
+        let decklistRaw = "";
+        let searchResultField = "";
+        let searchResultFieldName = "";
         let oracleBubble = "";
+
+        //color identity and wordcloud variables
         let colors = "";
         let costsString = "";
-        let apiCardNames = "";
-        let decklistRaw = "";
         let color1 = "#FFFFFF";
         let color2 = "#FFFFFF";
         let color3 = "#FFFFFF";
         let color4 = "#FFFFFF";
         let color5 = "#FFFFFF";
 
-        function clearDecklist() {
-            let clearDecklistText = "";
-            clearDecklistText = document.getElementById("decklistField");
-            clearDecklistText.value = "";
-            color1 = ""
-            color2 = ""
-            oracleBubble = ""
-
-        }
-
-        function clearOracle() {
-            let clearOracle = "";
-            clearOracle = document.getElementById("searchResultField");
-            clearOracle.value = "";
-            let clearOracle2 = "";
-            clearOracle2 = document.getElementById("searchResultFieldName");
-            clearOracle2.value = "";
-            oracleBubble = ""
-        }
-
-        function createWordcloud() {
-            console.log(oracleBubble)
-            const outputArray = words2weight(oracleBubble)
-            const canvas = document.getElementById('my_Canvas')
-            canvas.width = 800
-            canvas.height = 480
-
-            WordCloud(document.getElementById('my_Canvas'), {
-                list: outputArray,
-                color: function () {
-                    return ([color1, color2, color3])[Math.floor(Math.random() * 3)]
-                },
-                fontFamily: 'Couture',
-                backgroundColor: '#313338',
-                minRotation: 0,
-                maxRotation: 0,
-                weightFactor: 2,
-                shuffle: true
-            });
-        }
-
-        const words2weight = (str) => {
-            const returnMap = new Map();
-            const words = str.split(' ')
-            words.forEach(word => {
-                if (returnMap.has(word)) {
-                    returnMap.set(word, returnMap.get(word) + 1)
-                }
-                else {
-                    returnMap.set(word, 1)
-                }
-
-            });
-
-            //array^2
-            console.log(Array.from(returnMap.entries()))
-            //Array.from(returnMap.entries())
-            return Array.from(returnMap.entries())
-            //wytwalic wartosci 1
-        }
-
+        //imports decklist from textarea
         const importDecklist = async () => {
+            let waiting;
+
             let colors = "";
             let costsString = "";
             let decklistRaw = "";
             let decklistArray = [];
-            let apiCardNames = "";
             decklistRaw = document.getElementById("decklistField").value;
             decklistRaw = decklistRaw.slice(2);
             decklistRaw = decklistRaw.replace(/(\r\n..|\n..|\r..)/gm, "\n")
@@ -150,92 +88,84 @@
             decklistArray = decklistRaw;
             decklistArray = decklistArray.split("\n");
 
+            //for each card on the decklist, add it's oracle text to oracleBubble and repeat until done
             for (let index = 0; index < decklistArray.length; index++) {
 
                 let importCardName = "";
                 importCardName = decklistArray[index];
-                importCardURL = 'https://api.scryfall.com/cards/named?exact=' + importCardName;
+                importCardURL = `https://api.scryfall.com/cards/named?exact=${importCardName}`;
+
+                document.getElementById("waitingRoom").value = "Processing, please wait. [" + index + "]/[" + decklistArray.length + "]" + "[" + importCardName + "]";
 
                 const response = await fetch(importCardURL);
-                //const json = await response.json();
-                //const cardData = json.data[0];
                 const cardData = await response.json();
                 const cardName = cardData.name;
                 const cardCost = cardData.color_identity;
                 const cardOracle = cardData.oracle_text;
 
-                let result = document.getElementById("searchResultField");
-                let names = document.getElementById("searchResultFieldName");
+                let result = searchResultField;
 
                 oracleBubble = oracleBubble + cardOracle + " ";
                 costsString = costsString + cardCost;
-
-                //filtering characters
-                oracleBubble = oracleBubble.replace(/(\n)/gm, " ")
-                oracleBubble = oracleBubble.replace(/({.})/gm, "")
-                oracleBubble = oracleBubble.replace(/(,)/gm, "")
-                oracleBubble = oracleBubble.replace(/(\.)/gm, "")
-                oracleBubble = oracleBubble.replace(/(:)/gm, "")
-                oracleBubble = oracleBubble.replace(/(")/gm, "")
-                oracleBubble = oracleBubble.replace(/[()]/gm, "")
-                oracleBubble = oracleBubble.toLowerCase()
-                //filtering words
-                oracleBubble = oracleBubble.replace(/( a )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( at )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( and )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( then )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( only )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( 1 )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( 2 )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( 3 )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( 4 )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( 5 )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( 6 )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( 7 )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( 8 )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( 9 )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( an )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( of )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( on )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( its )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( it )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( one )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( two )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( three )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( put )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( add )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( may )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( cards )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( card )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( targets )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( target )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( controller )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( control )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( or )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( your )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( you )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( the )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( this )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( that )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( if )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( is )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( are )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( as )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( to )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( in )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( can )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( can't )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( has )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( any )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( with )/gm, " ")
-                oracleBubble = oracleBubble.replace(/( without )/gm, " ")
-
                 result.value = oracleBubble;
-                apiCardNames = apiCardNames + cardName + "\n";
-                names.value = apiCardNames;
             }
-            console.log(costsString);
 
+            //filtering oracleBubble for banned characters
+            oracleBubble = oracleBubble.replace(/(\n)/gm, " ")
+            oracleBubble = oracleBubble.replace(/({.})|(,)|(\.)|(:)|(")|[()]/gm, "")
+            oracleBubble = oracleBubble.toLowerCase()
+            //filtering oracleBubble for banned words
+            oracleBubble = oracleBubble.replace(/( a )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( at )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( and )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( then )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( only )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( 1 )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( 2 )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( 3 )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( 4 )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( 5 )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( 6 )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( 7 )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( 8 )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( 9 )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( an )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( of )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( on )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( its )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( it )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( one )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( two )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( three )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( put )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( add )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( may )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( cards )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( card )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( targets )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( target )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( controller )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( control )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( or )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( your )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( you )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( the )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( this )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( that )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( if )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( is )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( are )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( as )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( to )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( in )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( can )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( can't )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( has )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( any )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( with )/gm, " ")
+            oracleBubble = oracleBubble.replace(/( without )/gm, " ")
+
+            //assigning color identity to the deck
             if (costsString.includes("W")) {
                 colors = colors + "W";
             }
@@ -255,6 +185,7 @@
                 colors = colors + "C"
             }
 
+            //assigning wordcloud colors to the color identity
             if (colors === 'C') {
                 color1 = "#6c6c6c"
                 color2 = "#b2b2b2"
@@ -362,15 +293,66 @@
             } else {
                 console.log('Waiting for decklist');
             }
-            console.log(colors);
-            console.log(color1);
+            document.getElementById("waitingRoom").value = "Your decklist has been processed. You can create your wordcloud.";
         }
 
+        //creates wordcloud from oracleBubble
+        function createWordcloud() {
+            const outputArray = words2weight(oracleBubble)
+            const canvas = document.getElementById('my_Canvas')
+            canvas.width = 800
+            canvas.height = 480
 
+            WordCloud(document.getElementById('my_Canvas'), {
+                list: outputArray,
+                color: function () {
+                    return ([color1, color2, color3])[Math.floor(Math.random() * 3)]
+                },
+                fontFamily: 'Couture',
+                backgroundColor: '#313338',
+                minRotation: 0,
+                maxRotation: 0,
+                weightFactor: 2,
+                shuffle: true
+            });
+            document.getElementById("waitingRoom").value = "Generate your wordcloud again or clear the decklist and import a new one.";
+        }
+
+        //word weight from repetitions in oracleBubble converted into a set
+        const words2weight = (str) => {
+            const returnMap = new Map();
+            const words = str.split(' ')
+            words.forEach(word => {
+                if (returnMap.has(word)) {
+                    returnMap.set(word, returnMap.get(word) + 1)
+                }
+                else {
+                    returnMap.set(word, 1)
+                }
+
+            });
+            //Array.from(returnMap.entries())
+            return Array.from(returnMap.entries())
+
+        }
+
+        //clears the decklist textarea + stored oracle text
+        function clearDecklist() {
+            document.getElementById("decklistField").value = "";
+            document.getElementById("waitingRoom").value = "Paste your decklist in the text area above.";
+            color1 = ""
+            color2 = ""
+            oracleBubble = ""
+            document.getElementById("waitingRoom").value = "Paste your decklist in the text area above.";
+            searchResultField = "";
+            searchResultFieldName = "";
+            oracleBubble = ""
+
+        }
 
     </script>
     <p style="font-family:arial;">
-        <i>2023 Fisz-git v. 1.2.1</i><br>
+        <i>2023 Fisz-git v. 1.3.0</i><br>
         <i>Card data obtained courtesy of Scryfall API <a
                 href="https://scryfall.com/docs/api">https://scryfall.com/docs/api</a></i><br>
         <i>Word cloud generated using wordcloud2.js <a
