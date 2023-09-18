@@ -8,21 +8,19 @@
         }
 
         @font-face {
-        font-family: Beleren;
-        src: url(beleren-bold_P1.01.ttf);
+            font-family: Beleren;
+            src: url(beleren-bold_P1.01.ttf);
         }
 
         @font-face {
-        font-family: Couture;
-        src: url(couture-bld.otf);
+            font-family: Couture;
+            src: url(couture-bld.otf);
         }
-
-        
     </style>
 </head>
 
 <body style="background-color:#313338" text="dddddd">
-    
+
     <p style="font-family:Beleren; font-size:32px; margin-bottom:0"><b>Magic The Gathering: decklist word
             cloud</b></p>
     <canvas id="my_Canvas" width="1px" height="1px"></canvas>
@@ -39,49 +37,11 @@
         <textarea id="decklistField" value=""
             style="font-family: Arial; color: #dddddd; height:100px; width:500px; background-color:#2e3035"></textarea>
         <br>
-        
+
         <button type="button" onclick="importDecklist()">Import decklist</button>
         <button type="button" onclick="clearDecklist()">Clear decklist</button>
         <button type="button" onclick="clearOracle()">Clear oracle</button>
         <button type="button" onclick="createWordcloud()">Create wordcloud</button><br>
-
-        <select id = "dropdown" value="" onchange = "selectOption()">
-            <option value="0">Choose your deck colors...</option>
-            <option value="1">Colorless</option>
-            <option value="2">White</option>
-            <option value="3">Blue</option>
-            <option value="4">Black</option>
-            <option value="5">Red</option>
-            <option value="6">Green</option>
-            <option value="7">Azorius(WU)</option>
-            <option value="8">Dimir(UB)</option>
-            <option value="9">Rakdos(BR)</option>
-            <option value="10">Gruul(RG)</option>
-            <option value="11">Selesnya(WG)</option>
-            <option value="12">Orzhov(WB)</option>
-            <option value="13">Izzet(UR)</option>
-            <option value="14">Golgari(BG)</option>
-            <option value="15">Boros(WR)</option>
-            <option value="16">Simic(UG)</option>
-            <!-- options 17-32 disabled until I figure out how to use 3+ colors-->
-            <option value="17">Abzan(WBG)</option>
-            <option value="18">Jeskai(WUR)</option>
-            <option value="19">Sultai(UBG)</option>
-            <option value="20">Mardu(WBR)</option>
-            <option value="21">Temur(URG)</option>
-            <option value="22">Brokers(WUG)</option>
-            <option value="23">Obscura(WUB)</option>
-            <option value="24">Maestros(UBR)</option>
-            <option value="25">Riveteers(BRG)</option>
-            <option value="26">Cabaretti(WRG)</option>
-            <option disabled value="27">Yore-Tiller(WUBR)</option>
-            <option disabled value="28">Glint-Eye(UBRG)</option>
-            <option disabled value="29">Dune-Brood(BRGW)</option>
-            <option disabled value="30">Ink-Treader(RGWU)</option>
-            <option disabled value="31">Witch-Maw(GWUB)</option>
-            <option disabled value="32">5-color</option>
-
-        </select>
         <br>
 
         Combined, filtered oracle text for word cloud:
@@ -104,6 +64,8 @@
         let apiCardName = "";
         let apiCardURL = "";
         let oracleBubble = "";
+        let colors = "";
+        let costsString = "";
         let apiCardNames = "";
         let decklistRaw = "";
         let color1 = "#FFFFFF";
@@ -112,122 +74,6 @@
         let color4 = "#FFFFFF";
         let color5 = "#FFFFFF";
 
-        //deck colors
-        function selectOption() {
-            selectedValue = document.getElementById("dropdown").value;
-            console.log(selectedValue);
-
-            if (selectedValue === '1') {
-                color1 = "#6c6c6c"
-                color2 = "#b2b2b2"
-                color3 = "#8a8a8a"                
-            } else if (selectedValue === '2') {
-                color1 = "#d1b264"
-                color2 = "#d1c5a7"
-                color3 = "#d3bd88" 
-            } else if (selectedValue === '3') {
-                color1 = "#0064d1"
-                color2 = "#107bf0"
-                color3 = "#10a8f0"
-            } else if (selectedValue === '4') {
-                color1 = "#7700be"
-                color2 = "#b373d9"
-                color3 = "#9948ca"
-            } else if (selectedValue === '5') {
-                color1 = "#c80000"
-                color2 = "#ca3e3e"
-                color3 = "#cb6a6a"
-            } else if (selectedValue === '6') {
-                color1 = "#00551e"
-                color2 = "#246b3d"
-                color3 = "#367f50"
-            } else if (selectedValue === '7') {
-                color1 = "#e9e0ca"
-                color2 = "#107bf0"
-                color3 = "#70cffc"
-            } else if (selectedValue === '8') {
-                color1 = "#07357f"
-                color2 = "#6c6c6c"
-                color3 = "#00131c"
-            } else if (selectedValue === "9") {
-                color1 = "#6c6c6c"
-                color2 = "#c80000"
-                color3 = "#1c0000"
-            } else if (selectedValue === "10") {
-                color1 = "#c80000"
-                color2 = "#246b3d"
-                color3 = "#fa652f"
-            } else if (selectedValue === "11") {
-                color1 = "#f0fffb"
-                color2 = "#367f50"
-                color3 = "#ceffc1"
-            } else if (selectedValue === "12") {
-                color1 = "#fff0fc"
-                color2 = "#9948ca"
-                color3 = "#120022"
-            } else if (selectedValue === "13") {
-                color1 = "#ca3e3e"
-                color2 = "#107bf0"
-                color3 = "#cb6a6a"
-            } else if (selectedValue === "14") {
-                color1 = "#00551e"
-                color2 = "#6c6c6c"
-                color3 = "#000a03"
-            } else if (selectedValue === "15") {
-                color1 = "#c80000"
-                color2 = "#d3bd88"
-                color3 = "#fff7cc"
-            } else if (selectedValue === "16") {
-                color1 = "#367f50"
-                color2 = "#10a8f0"
-                color3 = "#00b98a"
-                //
-            } else if (selectedValue === "17") {
-                color1 = "#ffebb5"
-                color2 = "#171717"
-                color3 = "#005e29"
-            } else if (selectedValue === "18") {
-                color1 = "#fffeed"
-                color2 = "#24afff"
-                color3 = "#ff4000"
-            } else if (selectedValue === "19") {
-                color1 = "#0d0d0d"
-                color2 = "#006600"
-                color3 = "#003c66"
-            } else if (selectedValue === "20") {
-                color1 = "#c93c00"
-                color2 = "#1f0900"
-                color3 = "#fff7cf"
-            } else if (selectedValue === "21") {
-                color1 = "#e04000"
-                color2 = "#10a8f0"
-                color3 = "#00b98a"
-            } else if (selectedValue === "22") {
-                color1 = "#fff9e8"
-                color2 = "#3dcfff"
-                color3 = "#1d8500"
-            } else if (selectedValue === "23") {
-                color1 = "#003d82"
-                color2 = "#051a33"
-                color3 = "#d9eaff"
-            } else if (selectedValue === "24") {
-                color1 = "#0467c4"
-                color2 = "#1f0400"
-                color3 = "#7d1000"
-            } else if (selectedValue === "25") {
-                color1 = "#0b1700"
-                color2 = "#d63d00"
-                color3 = "#009600"
-            } else if (selectedValue === "26") {
-                color1 = "#fff799"
-                color2 = "#f24500"
-                color3 = "#256e00"
-            } else {
-                console.log('Error');
-            }
-            console.log(color1);
-        }
-
         function clearDecklist() {
             let clearDecklistText = "";
             clearDecklistText = document.getElementById("decklistField");
@@ -235,7 +81,7 @@
             color1 = ""
             color2 = ""
             oracleBubble = ""
-            
+
         }
 
         function clearOracle() {
@@ -257,13 +103,13 @@
 
             WordCloud(document.getElementById('my_Canvas'), {
                 list: outputArray,
-                color: function() {
+                color: function () {
                     return ([color1, color2, color3])[Math.floor(Math.random() * 3)]
-                }, 
-                fontFamily: 'Couture', 
-                backgroundColor: '#313338', 
-                minRotation: 0, 
-                maxRotation: 0, 
+                },
+                fontFamily: 'Couture',
+                backgroundColor: '#313338',
+                minRotation: 0,
+                maxRotation: 0,
                 weightFactor: 2,
                 shuffle: true
             });
@@ -289,8 +135,9 @@
             //wytwalic wartosci 1
         }
 
-
         const importDecklist = async () => {
+            let colors = "";
+            let costsString = "";
             let decklistRaw = "";
             let decklistArray = [];
             let apiCardNames = "";
@@ -300,25 +147,27 @@
 
             decklistArray = decklistRaw;
             decklistArray = decklistArray.split("\n");
-            console.log(decklistArray);
-            console.log(decklistArray.length);
 
             for (let index = 0; index < decklistArray.length; index++) {
 
                 let importCardName = "";
                 importCardName = decklistArray[index];
-                importCardURL = 'https://api.scryfall.com/cards/search?q=' + importCardName;
+                importCardURL = 'https://api.scryfall.com/cards/named?exact=' + importCardName;
 
                 const response = await fetch(importCardURL);
-                const json = await response.json();
-                const cardData = json.data[0];
+                //const json = await response.json();
+                //const cardData = json.data[0];
+                const cardData = await response.json();
                 const cardName = cardData.name;
+                const cardCost = cardData.color_identity;
                 const cardOracle = cardData.oracle_text;
 
                 let result = document.getElementById("searchResultField");
                 let names = document.getElementById("searchResultFieldName");
 
                 oracleBubble = oracleBubble + cardOracle + " ";
+                costsString = costsString + cardCost;
+
                 //filtering characters
                 oracleBubble = oracleBubble.replace(/(\n)/gm, " ")
                 oracleBubble = oracleBubble.replace(/({.})/gm, "")
@@ -330,6 +179,10 @@
                 oracleBubble = oracleBubble.toLowerCase()
                 //filtering words
                 oracleBubble = oracleBubble.replace(/( a )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( at )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( and )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( then )/gm, " ")
+                oracleBubble = oracleBubble.replace(/( only )/gm, " ")
                 oracleBubble = oracleBubble.replace(/( 1 )/gm, " ")
                 oracleBubble = oracleBubble.replace(/( 2 )/gm, " ")
                 oracleBubble = oracleBubble.replace(/( 3 )/gm, " ")
@@ -378,16 +231,144 @@
                 result.value = oracleBubble;
                 apiCardNames = apiCardNames + cardName + "\n";
                 names.value = apiCardNames;
-
             }
-            console.log(oracleBubble);
+            console.log(costsString);
 
+            if (costsString.includes("W")) {
+                colors = colors + "W";
+            }
+            if (costsString.includes("U")) {
+                colors = colors + "U";
+            }
+            if (costsString.includes("B")) {
+                colors = colors + "B";
+            }
+            if (costsString.includes("R")) {
+                colors = colors + "R";
+            }
+            if (costsString.includes("G")) {
+                colors = colors + "G";
+            }
+            if (colors === "") {
+                colors = colors + "C"
+            }
+
+            if (colors === 'C') {
+                color1 = "#6c6c6c"
+                color2 = "#b2b2b2"
+                color3 = "#8a8a8a"
+            } else if (colors === 'W') {
+                color1 = "#d1b264"
+                color2 = "#d1c5a7"
+                color3 = "#d3bd88"
+            } else if (colors === 'U') {
+                color1 = "#0064d1"
+                color2 = "#107bf0"
+                color3 = "#10a8f0"
+            } else if (colors === 'B') {
+                color1 = "#7700be"
+                color2 = "#b373d9"
+                color3 = "#9948ca"
+            } else if (colors === 'R') {
+                color1 = "#c80000"
+                color2 = "#ca3e3e"
+                color3 = "#cb6a6a"
+            } else if (colors === 'G') {
+                color1 = "#00551e"
+                color2 = "#246b3d"
+                color3 = "#367f50"
+            } else if (colors === 'WU') {
+                color1 = "#e9e0ca"
+                color2 = "#107bf0"
+                color3 = "#70cffc"
+            } else if (colors === 'UB') {
+                color1 = "#07357f"
+                color2 = "#6c6c6c"
+                color3 = "#00131c"
+            } else if (colors === "BR") {
+                color1 = "#6c6c6c"
+                color2 = "#c80000"
+                color3 = "#1c0000"
+            } else if (colors === "RG") {
+                color1 = "#c80000"
+                color2 = "#246b3d"
+                color3 = "#fa652f"
+            } else if (colors === "WG") {
+                color1 = "#f0fffb"
+                color2 = "#367f50"
+                color3 = "#ceffc1"
+            } else if (colors === "WB") {
+                color1 = "#fff0fc"
+                color2 = "#9948ca"
+                color3 = "#120022"
+            } else if (colors === "UR") {
+                color1 = "#ca3e3e"
+                color2 = "#107bf0"
+                color3 = "#cb6a6a"
+            } else if (colors === "BG") {
+                color1 = "#00551e"
+                color2 = "#6c6c6c"
+                color3 = "#000a03"
+            } else if (colors === "WR") {
+                color1 = "#c80000"
+                color2 = "#d3bd88"
+                color3 = "#fff7cc"
+            } else if (colors === "UG") {
+                color1 = "#367f50"
+                color2 = "#10a8f0"
+                color3 = "#00b98a"
+            } else if (colors === "WBG") {
+                color1 = "#ffebb5"
+                color2 = "#171717"
+                color3 = "#005e29"
+            } else if (colors === "WUR") {
+                color1 = "#fffeed"
+                color2 = "#24afff"
+                color3 = "#ff4000"
+            } else if (colors === "UBG") {
+                color1 = "#0d0d0d"
+                color2 = "#006600"
+                color3 = "#003c66"
+            } else if (colors === "WBR") {
+                color1 = "#c93c00"
+                color2 = "#1f0900"
+                color3 = "#fff7cf"
+            } else if (colors === "URG") {
+                color1 = "#e04000"
+                color2 = "#10a8f0"
+                color3 = "#00b98a"
+            } else if (colors === "WUG") {
+                color1 = "#fff9e8"
+                color2 = "#3dcfff"
+                color3 = "#1d8500"
+            } else if (colors === "WUB") {
+                color1 = "#003d82"
+                color2 = "#051a33"
+                color3 = "#d9eaff"
+            } else if (colors === "UBR") {
+                color1 = "#0467c4"
+                color2 = "#1f0400"
+                color3 = "#7d1000"
+            } else if (colors === "BRG") {
+                color1 = "#0b1700"
+                color2 = "#d63d00"
+                color3 = "#009600"
+            } else if (colors === "WRG") {
+                color1 = "#fff799"
+                color2 = "#f24500"
+                color3 = "#256e00"
+            } else {
+                console.log('Waiting for decklist');
+            }
+            console.log(colors);
+            console.log(color1);
         }
+
 
 
     </script>
     <p style="font-family:arial;">
-        <i>2023 Fisz-git v. 1.1.2</i><br>
+        <i>2023 Fisz-git v. 1.2.0</i><br>
         <i>Card data obtained courtesy of Scryfall API <a
                 href="https://scryfall.com/docs/api">https://scryfall.com/docs/api</a></i><br>
         <i>Word cloud generated using wordcloud2.js <a
