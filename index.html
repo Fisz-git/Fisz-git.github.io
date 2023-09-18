@@ -57,17 +57,13 @@
     <script>
 
         //API search variables
-        let apiCardName = "";
-        let apiCardURL = "";
-        let decklistRaw = "";
-        let searchResultField = "";
-        let searchResultFieldName = "";
-        let oracleBubble = "";
+        let decklistRaw = ""; //decklist pasted in the textarea, MTGO format 1 CARDNAME, no headers, no editions/#, endgame - string, each new line separated by \n
+        let oracleBubble = ""; //combined (and later filtered) oracle text of all imported cards
 
         //color identity and wordcloud variables
-        let colors = "";
-        let costsString = "";
-        let color1 = "#FFFFFF";
+        let colors = ""; //deck's color identity
+        let costsString = ""; //string used to store all colored mana costs from a deck
+        let color1 = "#FFFFFF"; //color1-5 wordcloud word weight colors corresponding to the deck's color identity
         let color2 = "#FFFFFF";
         let color3 = "#FFFFFF";
         let color4 = "#FFFFFF";
@@ -103,11 +99,8 @@
                 const cardCost = cardData.color_identity;
                 const cardOracle = cardData.oracle_text;
 
-                let result = searchResultField;
-
                 oracleBubble = oracleBubble + cardOracle + " ";
                 costsString = costsString + cardCost;
-                result.value = oracleBubble;
             }
 
             //filtering oracleBubble for banned characters
@@ -186,152 +179,181 @@
             }
 
             //assigning wordcloud colors to the color identity
-            if (colors === 'C') {
-                color1 = "#6c6c6c"
-                color2 = "#b2b2b2"
-                color3 = "#8a8a8a"
-            } else if (colors === 'W') {
-                color1 = "#d1b264"
-                color2 = "#d1c5a7"
-                color3 = "#d3bd88"
-            } else if (colors === 'U') {
-                color1 = "#0064d1"
-                color2 = "#107bf0"
-                color3 = "#10a8f0"
-            } else if (colors === 'B') {
-                color1 = "#7700be"
-                color2 = "#b373d9"
-                color3 = "#9948ca"
-            } else if (colors === 'R') {
-                color1 = "#c80000"
-                color2 = "#ca3e3e"
-                color3 = "#cb6a6a"
-            } else if (colors === 'G') {
-                color1 = "#00551e"
-                color2 = "#246b3d"
-                color3 = "#367f50"
-            } else if (colors === 'WU') {
-                color1 = "#e9e0ca"
-                color2 = "#107bf0"
-                color3 = "#70cffc"
-            } else if (colors === 'UB') {
-                color1 = "#07357f"
-                color2 = "#6c6c6c"
-                color3 = "#00131c"
-            } else if (colors === "BR") {
-                color1 = "#6c6c6c"
-                color2 = "#c80000"
-                color3 = "#1c0000"
-            } else if (colors === "RG") {
-                color1 = "#c80000"
-                color2 = "#246b3d"
-                color3 = "#fa652f"
-            } else if (colors === "WG") {
-                color1 = "#f0fffb"
-                color2 = "#367f50"
-                color3 = "#ceffc1"
-            } else if (colors === "WB") {
-                color1 = "#fff0fc"
-                color2 = "#9948ca"
-                color3 = "#120022"
-            } else if (colors === "UR") {
-                color1 = "#ca3e3e"
-                color2 = "#107bf0"
-                color3 = "#cb6a6a"
-            } else if (colors === "BG") {
-                color1 = "#00551e"
-                color2 = "#6c6c6c"
-                color3 = "#000a03"
-            } else if (colors === "WR") {
-                color1 = "#c80000"
-                color2 = "#d3bd88"
-                color3 = "#fff7cc"
-            } else if (colors === "UG") {
-                color1 = "#367f50"
-                color2 = "#10a8f0"
-                color3 = "#00b98a"
-            } else if (colors === "WBG") {
-                color1 = "#ffebb5"
-                color2 = "#171717"
-                color3 = "#005e29"
-            } else if (colors === "WUR") {
-                color1 = "#fffeed"
-                color2 = "#24afff"
-                color3 = "#ff4000"
-            } else if (colors === "UBG") {
-                color1 = "#0d0d0d"
-                color2 = "#006600"
-                color3 = "#003c66"
-            } else if (colors === "WBR") {
-                color1 = "#c93c00"
-                color2 = "#1f0900"
-                color3 = "#fff7cf"
-            } else if (colors === "URG") {
-                color1 = "#e04000"
-                color2 = "#10a8f0"
-                color3 = "#00b98a"
-            } else if (colors === "WUG") {
-                color1 = "#fff9e8"
-                color2 = "#3dcfff"
-                color3 = "#1d8500"
-            } else if (colors === "WUB") {
-                color1 = "#003d82"
-                color2 = "#051a33"
-                color3 = "#d9eaff"
-            } else if (colors === "UBR") {
-                color1 = "#0467c4"
-                color2 = "#1f0400"
-                color3 = "#7d1000"
-            } else if (colors === "BRG") {
-                color1 = "#0b1700"
-                color2 = "#d63d00"
-                color3 = "#009600"
-            } else if (colors === "WRG") {
-                color1 = "#fff799"
-                color2 = "#f24500"
-                color3 = "#256e00"
-            } else if (colors === "WUBR") {
-                color1 = "#defdff"
-                color2 = "#0081c2"
-                color3 = "#002436"
-                color4 = "#fc2200"
-            } else if (colors === "WUBG") {
-                color1 = "#d6ffef"
-                color2 = "#1f8bcf"
-                color3 = "#011826"
-                color4 = "#007006"
-            } else if (colors === "UBRG") {
-                color1 = "#375da3"
-                color2 = "#000f2b"
-                color3 = "#c41704"
-                color4 = "#006903"
-            } else if (colors === "WBRG") {
-                color1 = "#e3e3e3"
-                color2 = "#212121"
-                color3 = "#212121"
-                color4 = "#248000"
-            } else if (colors === "WURG") {
-                color1 = "#e5ffdb"
-                color2 = "#009df2"
-                color3 = "#f23000"
-                color4 = "#00a108"
-            } else if (colors === "WUBRG") {
-                color1 = "#ffffe6"
-                color2 = "#0086d4"
-                color3 = "#000000"
-                color4 = "#ff3300"
-                color5 = "#00a108"
-            }
-            else {
-                console.log('Waiting for decklist');
-            }
+            switch (colors) {
+                case "C":
+                    color1 = "#6c6c6c"
+                    color2 = "#b2b2b2"
+                    color3 = "#8a8a8a"
+                    break;
+                case "W":
+                    color1 = "#d1b264"
+                    color2 = "#d1c5a7"
+                    color3 = "#d3bd88"
+                    break;
+                case "U":
+                    color1 = "#0064d1"
+                    color2 = "#107bf0"
+                    color3 = "#10a8f0"
+                    break;
+                case "B":
+                    color1 = "#7700be";
+                    color2 = "#b373d9";
+                    color3 = "#9948ca";
+                    break;
+                case "R":
+                    color1 = "#c80000";
+                    color2 = "#ca3e3e";
+                    color3 = "#cb6a6a";
+                    break;
+                case "G":
+                    color1 = "#00551e";
+                    color2 = "#246b3d";
+                    color3 = "#367f50";
+                    break;
+                case "WU":
+                    color1 = "#e9e0ca";
+                    color2 = "#107bf0";
+                    color3 = "#70cffc";
+                    break;
+                case "UB":
+                    color1 = "#07357f";
+                    color2 = "#6c6c6c";
+                    color3 = "#00131c";
+                    break;
+                case "BR":
+                    color1 = "#6c6c6c";
+                    color2 = "#c80000";
+                    color3 = "#1c0000";
+                    break;
+                case "RG":
+                    color1 = "#c80000"
+                    color2 = "#246b3d"
+                    color3 = "#fa652f"
+                    break;
+                case "WG":
+                    color1 = "#f0fffb"
+                    color2 = "#367f50"
+                    color3 = "#ceffc1"
+                    break;
+                case "WB":
+                    color1 = "#fff0fc"
+                    color2 = "#9948ca"
+                    color3 = "#120022"
+                    break;
+                case "UR":
+                    color1 = "#ca3e3e"
+                    color2 = "#107bf0"
+                    color3 = "#cb6a6a"
+                    break;
+                case "BG":
+                    color1 = "#00551e"
+                    color2 = "#6c6c6c"
+                    color3 = "#000a03"
+                    break;
+                case "WR":
+                    color1 = "#c80000"
+                    color2 = "#d3bd88"
+                    color3 = "#fff7cc"
+                    break;
+                case "UG":
+                    color1 = "#367f50"
+                    color2 = "#10a8f0"
+                    color3 = "#00b98a"
+                    break;
+                case "WBG":
+                    color1 = "#ffebb5"
+                    color2 = "#171717"
+                    color3 = "#005e29"
+                    break;
+                case "WUR":
+                    color1 = "#fffeed"
+                    color2 = "#24afff"
+                    color3 = "#ff4000"
+                    break;
+                case "UBG":
+                    color1 = "#0d0d0d"
+                    color2 = "#006600"
+                    color3 = "#003c66"
+                    break;
+                case "WBR":
+                    color1 = "#c93c00"
+                    color2 = "#1f0900"
+                    color3 = "#fff7cf"
+                    break;
+                case "URG":
+                    color1 = "#e04000"
+                    color2 = "#10a8f0"
+                    color3 = "#00b98a"
+                    break;
+                case "WUG":
+                    color1 = "#fff9e8"
+                    color2 = "#3dcfff"
+                    color3 = "#1d8500"
+                    break;
+                case "WUB":
+                    color1 = "#003d82"
+                    color2 = "#051a33"
+                    color3 = "#d9eaff"
+                    break;
+                case "UBR":
+                    color1 = "#0467c4"
+                    color2 = "#1f0400"
+                    color3 = "#7d1000"
+                    break;
+                case "BRG":
+                    color1 = "#0b1700"
+                    color2 = "#d63d00"
+                    color3 = "#009600"
+                    break;
+                case "WRG":
+                    color1 = "#fff799"
+                    color2 = "#f24500"
+                    color3 = "#256e00"
+                    break;
+                case "WUBR":
+                    color1 = "#defdff"
+                    color2 = "#0081c2"
+                    color3 = "#002436"
+                    color4 = "#fc2200"
+                    break;
+                case "WUBG":
+                    color1 = "#d6ffef"
+                    color2 = "#1f8bcf"
+                    color3 = "#011826"
+                    color4 = "#007006"
+                    break;
+                case "UBRG":
+                    color1 = "#375da3"
+                    color2 = "#000f2b"
+                    color3 = "#c41704"
+                    color4 = "#006903"
+                    break;
+                case "WBRG":
+                    color1 = "#e3e3e3"
+                    color2 = "#212121"
+                    color3 = "#212121"
+                    color4 = "#248000"
+                    break;
+                case "WURG":
+                    color1 = "#e5ffdb"
+                    color2 = "#009df2"
+                    color3 = "#f23000"
+                    color4 = "#00a108"
+                    break;
+                case "WUBRG":
+                    color1 = "#ffffe6"
+                    color2 = "#0086d4"
+                    color3 = "#000000"
+                    color4 = "#ff3300"
+                    color5 = "#00a108"
+                }
             
-            console.log(colors.length);
+            //sorting out 4th and 5th color for <3c decks - color1 and color2 x2
             if (colors.length <= 3) {
                 color4 = color1;
                 color5 = color2;
             }
-
+            // sorting out 5th color for 4c decks - boring gray
             if (colors.length === 4) {
                 color5 = "#787878"
             }
@@ -346,6 +368,7 @@
             canvas.width = 800
             canvas.height = 480
 
+            //wordcloud2.js parameters https://github.com/timdream/wordcloud2.js/blob/gh-pages/API.md
             WordCloud(document.getElementById('my_Canvas'), {
                 list: outputArray,
                 color: function () {
@@ -375,7 +398,7 @@
                 }
 
             });
-            //Array.from(returnMap.entries())
+            
             return Array.from(returnMap.entries())
 
         }
@@ -384,19 +407,13 @@
         function clearDecklist() {
             document.getElementById("decklistField").value = "";
             document.getElementById("waitingRoom").value = "Paste your decklist in the text area above.";
-            color1 = ""
-            color2 = ""
-            oracleBubble = ""
-            document.getElementById("waitingRoom").value = "Paste your decklist in the text area above.";
-            searchResultField = "";
-            searchResultFieldName = "";
             oracleBubble = ""
 
         }
 
     </script>
     <p style="font-family:arial;">
-        <i>2023 Fisz-git v. 1.4.0</i><br>
+        <i>2023 Fisz-git v. 1.5.0</i><br>
         <i>Card data obtained courtesy of Scryfall API <a
                 href="https://scryfall.com/docs/api">https://scryfall.com/docs/api</a></i><br>
         <i>Word cloud generated using wordcloud2.js <a
