@@ -12,10 +12,6 @@
             src: url(beleren-bold_P1.01.ttf);
         }
 
-        @font-face {
-            font-family: Couture;
-            src: url(couture-bld.otf);
-        }
     </style>
 </head>
 
@@ -106,7 +102,6 @@
             //filtering oracleBubble for banned characters
             oracleBubble = oracleBubble.replace(/(\n)/gm, " ")
             oracleBubble = oracleBubble.replace(/({.})|(,)|(\.)|(:)|(")|[()]/gm, "")
-            oracleBubble = oracleBubble.toLowerCase()
             //filtering oracleBubble for banned words
             oracleBubble = oracleBubble.replace(/( a )/gm, " ")
             oracleBubble = oracleBubble.replace(/( at )/gm, " ")
@@ -157,6 +152,7 @@
             oracleBubble = oracleBubble.replace(/( any )/gm, " ")
             oracleBubble = oracleBubble.replace(/( with )/gm, " ")
             oracleBubble = oracleBubble.replace(/( without )/gm, " ")
+            oracleBubble = oracleBubble.toUpperCase()
 
             //assigning color identity to the deck
             if (costsString.includes("W")) {
@@ -374,7 +370,8 @@
                 color: function () {
                     return ([color1, color2, color3, color4, color5])[Math.floor(Math.random() * 5)]
                 },
-                fontFamily: 'Couture',
+                fontFamily: 'Corbel',
+                fontWeight: '900',
                 backgroundColor: '#313338',
                 minRotation: 0,
                 maxRotation: 0,
@@ -413,7 +410,7 @@
 
     </script>
     <p style="font-family:arial;">
-        <i>2023 Fisz-git v. 1.5.0</i><br>
+        <i>2023 Fisz-git v. 1.5.1</i><br>
         <i>Card data obtained courtesy of Scryfall API <a
                 href="https://scryfall.com/docs/api">https://scryfall.com/docs/api</a></i><br>
         <i>Word cloud generated using wordcloud2.js <a
